@@ -5,3 +5,4 @@ public record NotaPercentualDTO(
         Long quantidade,
         Double percentual
 ) {}
+

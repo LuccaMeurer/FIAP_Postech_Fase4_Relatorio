@@ -10,3 +10,4 @@ public record RelatorioResumoDTO(
         List<NotaPercentualDTO> top3Notas
 ) {}
 
+

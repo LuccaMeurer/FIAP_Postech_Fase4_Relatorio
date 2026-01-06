@@ -1,46 +1,51 @@
 package fiap.postech.fase4.relatorio.repository;
 
-import fiap.postech.fase4.relatorio.Model.Avaliacao;
-import fiap.postech.fase4.relatorio.dto.NotaQuantidadeDTO;
-import fiap.postech.fase4.relatorio.dto.TotalMediaDTO;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
-import java.time.LocalDateTime;
-import java.util.List;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 
-public interface AvaliacaoRepository extends JpaRepository<Avaliacao, Long> {
+import java.util.HashMap;
+import java.util.Map;
 
-    @Query("""
-        select count(a.id) as total,
-               avg(a.nota)  as media
-        from Avaliacao a
-        where (:dataInicio is null or a.dataEnvio >= :dataInicio)
-    """)
-    TotalMediaDTO totalEAvg(
-            @Param("dataInicio") LocalDateTime dataInicio
-    );
+@Repository
+public class AvaliacaoRepository {
 
-    @Query("""
-        select a.nota as nota,
-               count(a.id) as quantidade
-        from Avaliacao a
-        where (:dataInicio is null or a.dataEnvio >= :dataInicio)
-        group by a.nota
-    """)
-    List<NotaQuantidadeDTO> contarPorNota(
-            @Param("dataInicio") LocalDateTime dataInicio
-    );
+    private final JdbcTemplate jdbcTemplate;
 
-    @Query("""
-        select a.nota
-        from Avaliacao a
-        where (:dataInicio is null or a.dataEnvio >= :dataInicio)
-        order by a.nota
-    """)
-    List<Integer> listarNotasOrdenadas(
-            @Param("dataInicio") LocalDateTime dataInicio
-    );
+    public AvaliacaoRepository(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
+    public Map<Integer, Integer> contarPorNota(Integer dias) {
+
+        StringBuilder sql = new StringBuilder("""
+            SELECT nota, COUNT(*) qtd
+            FROM avaliacao
+        """);
+
+        Object[] params;
+
+        if (dias != null) {
+            sql.append(" WHERE data >= DATE_SUB(NOW(), INTERVAL ? DAY)");
+            params = new Object[]{dias};
+        } else {
+            params = new Object[]{};
+        }
+
+        sql.append(" GROUP BY nota");
+
+        return jdbcTemplate.query(
+                sql.toString(),
+                params,
+                rs -> {
+                    Map<Integer, Integer> map = new HashMap<>();
+                    while (rs.next()) {
+                        map.put(
+                                rs.getInt("nota"),
+                                rs.getInt("qtd")
+                        );
+                    }
+                    return map;
+                }
+        );
+    }
 }
-
-
