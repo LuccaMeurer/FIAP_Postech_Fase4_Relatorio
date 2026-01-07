@@ -1,19 +1,21 @@
 name: Envio Relatorio Semanal
 
 on:
-  schedule:
-    # Segunda-feira 08:00 Brasil (UTC-3) = 11:00 UTC
-    - cron: "0 11 * * 1"
   workflow_dispatch:
 
 jobs:
   chamar-function:
     runs-on: ubuntu-latest
     steps:
-      - name: Chamar Azure Function para envio do email
+      - name: Testar conectividade com Azure Function
         run: |
-          set -e
-          echo "Chamando Azure Function..."
-          curl -v --fail --connect-timeout 30 --max-time 60 \
-            -X GET "https://func-relatorio-dabrfqcm7hmajh6.azurewebsites.net/api/email/teste"
+          echo "Testando DNS..."
+          nslookup func-relatorio-dabrfqcm7hmajh6.azurewebsites.net || true
 
+          echo "Testando HTTP..."
+          curl -v https://func-relatorio-dabrfqcm7hmajh6.azurewebsites.net/api/ping || true
+
+          echo "Chamando envio de email..."
+          curl -v https://func-relatorio-dabrfqcm7hmajh6.azurewebsites.net/api/email/teste || true
+
+          echo "Workflow terminou"
