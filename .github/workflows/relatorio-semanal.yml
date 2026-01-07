@@ -12,4 +12,8 @@ jobs:
     steps:
       - name: Chamar Azure Function para envio do email
         run: |
-          curl -i -s -S -X GET "https://func-relatorio-dabrfqcmf7hmajh6.azurewebsites.net/api/email/teste"
+          set -e
+          echo "Chamando Azure Function..."
+          curl -v --fail --connect-timeout 30 --max-time 60 \
+            -X GET "https://func-relatorio-dabrfqcm7hmajh6.azurewebsites.net/api/email/teste"
+
