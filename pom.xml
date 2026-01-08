@@ -95,6 +95,7 @@
 						<os>windows</os>
 						<javaVersion>17</javaVersion>
 					</runtime>
+					<skipInstallExtensions>true</skipInstallExtensions>
 				</configuration>
 			</plugin>
 		</plugins>
