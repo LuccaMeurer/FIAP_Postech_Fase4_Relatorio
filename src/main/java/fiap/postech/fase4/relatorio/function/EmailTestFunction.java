@@ -32,15 +32,12 @@ public class EmailTestFunction {
             EmailService emailService =
                     SpringContext.getBean(EmailService.class);
 
-            // 🔥 GERA O MESMO RESUMO USADO NA ROTA /relatorio/excel
             RelatorioResumoDTO resumo =
                     relatorioService.gerarResumo(null);
 
-            // 🔥 GERA O EXCEL REAL (XLSX)
             byte[] excel =
                     ExcelRelatorioBuilder.gerar(resumo);
 
-            // LOG PARA CONFERÊNCIA
             context.getLogger().info("Excel bytes = " + excel.length);
 
             emailService.enviarRelatorio(

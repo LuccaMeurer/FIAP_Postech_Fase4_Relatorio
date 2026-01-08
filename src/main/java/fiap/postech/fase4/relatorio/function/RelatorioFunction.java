@@ -19,9 +19,6 @@ public class RelatorioFunction {
         return Integer.parseInt(diasStr);
     }
 
-    // =========================
-    // JSON
-    // =========================
     @FunctionName("relatorioResumo")
     public HttpResponseMessage resumo(
             @HttpTrigger(
@@ -52,9 +49,6 @@ public class RelatorioFunction {
         }
     }
 
-    // =========================
-    // CSV
-    // =========================
     @FunctionName("relatorioCsv")
     public HttpResponseMessage csv(
             @HttpTrigger(
@@ -104,9 +98,6 @@ public class RelatorioFunction {
         }
     }
 
-    // =========================
-    // EXCEL (USANDO BUILDER)
-    // =========================
     @FunctionName("relatorioExcel")
     public HttpResponseMessage excel(
             @HttpTrigger(

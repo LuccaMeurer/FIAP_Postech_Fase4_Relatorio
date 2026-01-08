@@ -14,14 +14,13 @@ public class RelatorioTimerFunction {
     public void executar(
             @TimerTrigger(
                     name = "timer",
-                    schedule = "0 */1 * * * *" // a cada 1 minuto
+                    schedule = "0 0 11 * * 1"
             )
             String timerInfo,
             ExecutionContext context
     ) {
 
-        // 🔥 LOG ABSOLUTO – SE NÃO APARECER, O TIMER NÃO EXECUTOU
-        context.getLogger().severe("🔥 TIMER RELATORIO SEMANAL DISPAROU 🔥");
+        context.getLogger().severe("TIMER RELATORIO SEMANAL DISPAROU");
 
         try {
             context.getLogger().severe("⏳ Iniciando processo de relatório...");

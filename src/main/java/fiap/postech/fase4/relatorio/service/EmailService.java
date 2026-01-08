@@ -2,16 +2,17 @@ package fiap.postech.fase4.relatorio.service;
 
 import jakarta.activation.DataHandler;
 import jakarta.activation.DataSource;
+import jakarta.activation.FileTypeMap;
+import jakarta.activation.MimetypesFileTypeMap;
 import jakarta.mail.*;
 import jakarta.mail.internet.*;
 
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.ByteArrayInputStream;
 import java.util.Properties;
-
 
 @Service
 public class EmailService {
@@ -24,29 +25,42 @@ public class EmailService {
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
 
-        Session session = Session.getInstance(props,
+        Session session = Session.getInstance(
+                props,
                 new Authenticator() {
+                    @Override
                     protected PasswordAuthentication getPasswordAuthentication() {
                         return new PasswordAuthentication(
                                 System.getenv("EMAIL_USER"),
                                 System.getenv("EMAIL_PASS")
                         );
                     }
-                });
+                }
+        );
 
         MimeMessage message = new MimeMessage(session);
-        message.setFrom(new InternetAddress(System.getenv("EMAIL_USER")));
+
+        message.setFrom(
+                new InternetAddress(System.getenv("EMAIL_USER"))
+        );
         message.setRecipients(
                 Message.RecipientType.TO,
                 InternetAddress.parse(destinatario)
         );
-        message.setSubject("Relatório Semanal de Avaliações");
 
-        // ===== TEXTO =====
+        message.setSubject(
+                "Relatório Semanal de Avaliações",
+                "UTF-8"
+        );
+
         MimeBodyPart texto = new MimeBodyPart();
-        texto.setText("Segue em anexo o relatório semanal de avaliações.");
+        texto.setText(
+                "Bom dia,\n\n" +
+                        "Segue em anexo o relatório semanal de avaliações.\n\n" +
+                        "Atenciosamente,",
+                "UTF-8"
+        );
 
-        // ===== ANEXO (FORMA CORRETA) =====
         MimeBodyPart anexo = new MimeBodyPart();
 
         DataSource dataSource = new DataSource() {
@@ -74,7 +88,7 @@ public class EmailService {
         anexo.setDataHandler(new DataHandler(dataSource));
         anexo.setFileName("relatorio.xlsx");
 
-        Multipart multipart = new MimeMultipart();
+        Multipart multipart = new MimeMultipart("mixed");
         multipart.addBodyPart(texto);
         multipart.addBodyPart(anexo);
 

@@ -25,7 +25,7 @@ public class AvaliacaoRepository {
         Object[] params;
 
         if (dias != null) {
-            sql.append(" WHERE data >= DATE_SUB(NOW(), INTERVAL ? DAY)");
+            sql.append(" WHERE data_envio >= DATE_SUB(NOW(), INTERVAL ? DAY)");
             params = new Object[]{dias};
         } else {
             params = new Object[]{};
