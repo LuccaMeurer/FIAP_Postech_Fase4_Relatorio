@@ -79,6 +79,14 @@
 				<groupId>com.microsoft.azure</groupId>
 				<artifactId>azure-functions-maven-plugin</artifactId>
 				<version>1.36.0</version>
+				<executions>
+					<execution>
+						<id>package-functions</id>
+						<goals>
+							<goal>package</goal>
+						</goals>
+					</execution>
+				</executions>
 				<configuration>
 					<appName>func-relatorio</appName>
 					<resourceGroup>fiap-postech</resourceGroup>
@@ -89,8 +97,6 @@
 					</runtime>
 				</configuration>
 			</plugin>
-
 		</plugins>
 	</build>
-
 </project>
