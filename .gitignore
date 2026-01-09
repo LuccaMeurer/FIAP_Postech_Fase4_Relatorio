@@ -31,3 +31,9 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Azure Functions
+local.settings.json
+
+# Azurite (Azure Storage Emulator)
+__azurite_db_*.json
