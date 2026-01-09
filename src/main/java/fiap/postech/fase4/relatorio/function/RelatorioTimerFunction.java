@@ -14,9 +14,9 @@ public class RelatorioTimerFunction {
     public void executar(
             @TimerTrigger(
                     name = "timer",
-                    schedule = "0 0 11 * * 1" // Executa a cada 5 minutos
+                    schedule = "0 */5 * * * *" // Executa a cada 5 minutos
                     // Executa toda segunda-feira às 08:00 (horário do Brasil - UTC-3)
-                    // schedule = "0 */5 * * * *"
+                    // schedule = "0 0 11 * * 1"
             )
             String timerInfo,
             ExecutionContext context
